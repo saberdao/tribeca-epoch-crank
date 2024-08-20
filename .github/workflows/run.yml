@@ -28,4 +28,6 @@ jobs:
 
       - name: Run bot
         id: run-bot
+        env:
+          RPC_URL: ${{ secrets.RPC_URL }}
         run: yarn start
