@@ -2,10 +2,15 @@
   "name": "tribeca-epoch-crank",
   "packageManager": "yarn@1.22.22",
   "devDependencies": {
+    "@types/node": "^22.4.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
   },
   "scripts": {
+    "local": "node -r ts-node/register --env-file=.env bot.ts",
     "start": "ts-node bot.ts"
+  },
+  "dependencies": {
+    "@solana/web3.js": "^1.95.2"
   }
 }
