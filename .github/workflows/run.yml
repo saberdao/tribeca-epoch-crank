@@ -21,6 +21,7 @@ jobs:
         with:
           node-version: 20.11.1
           cache: npm
+          corepack-enable: true
 
       - name: Install Dependencies
         id: yarn-ci
