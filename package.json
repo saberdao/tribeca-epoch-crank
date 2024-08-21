@@ -2,15 +2,29 @@
   "name": "tribeca-epoch-crank",
   "packageManager": "yarn@1.22.22",
   "devDependencies": {
+    "@project-serum/anchor": "^0.26.0",
+    "@quarryprotocol/gauge": "^0.4.3",
+    "@saberhq/anchor-contrib": "^3.0.0",
+    "@types/lodash": "^4.17.7",
     "@types/node": "^22.4.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
   },
   "scripts": {
     "local": "node -r ts-node/register --env-file=.env bot.ts",
-    "start": "ts-node bot.ts"
+    "start": "ts-node bot.ts",
+    "postinstall": "node postinstall.js"
   },
   "dependencies": {
-    "@solana/web3.js": "^1.95.2"
+    "@coral-xyz/anchor": "^0.26",
+    "@gokiprotocol/client": "^0.11.1",
+    "@quarryprotocol/quarry-sdk": "^5.3.0",
+    "@saberhq/solana-contrib": "^3.0.0",
+    "@saberhq/token-utils": "^3.0.0",
+    "@solana/web3.js": "^1.95.2",
+    "@tribecahq/tribeca-sdk": "^0.5.8",
+    "bs58": "^6.0.0",
+    "lodash": "^4.17.21",
+    "throat": "^6.0.2"
   }
 }
