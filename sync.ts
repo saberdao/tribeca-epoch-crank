@@ -79,33 +79,11 @@ const run = async () => {
     return;
   }
 
-  const gm = parsers.gaugemeister(gaugemeister.data);
-
-  const nextEpochStartsAt = gm.nextEpochStartsAt.toNumber();
-  if (nextEpochStartsAt > Date.now() / 1000) {
-    console.log("Next epoch not yet started");
-    return;
-  }
-
   // Trigger next epoch
   const provider = getProvider(wallet, connection);
   const gaugeSDK = GaugeSDK.load({
     provider,
   });
-  const triggerTX = gaugeSDK.gauge.triggerNextEpoch({
-    gaugemeister: gaugemeisterKey,
-  });
-
-  const tx = await sendTransactionWithRetry(
-    connection,
-    triggerTX.instructions,
-    [wallet],
-    wallet
-  );
-  console.log(tx);
-
-  // Wait 15 seconds for the RPC to update
-  await new Promise((resolve) => setTimeout(resolve, 15000));
 
   // Sync rewards
   const registryInfo = await connection.getAccountInfo(
@@ -120,7 +98,7 @@ const run = async () => {
 
   const rewarderConfig = await (
     await fetch(
-      `https://raw.githubusercontent.com/QuarryProtocol/rewarder-list-build/master/mainnet-beta/rewarders/rXhAofQCT7NN9TUqigyEAUzV1uLL4boeD8CRkNBSkYk/full.json`
+      `https://raw.githubusercontent.com/saberdao/rewarder-list-build/master/mainnet-beta/rewarders/rXhAofQCT7NN9TUqigyEAUzV1uLL4boeD8CRkNBSkYk/full.json`
     )
   ).json();
   const configMints: PublicKey[] = rewarderConfig?.quarries.map(

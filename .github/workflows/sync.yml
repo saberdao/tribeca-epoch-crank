@@ -1,0 +1,32 @@
+name: Sync gauges
+
+on:
+  workflow_dispatch:
+
+jobs:
+  sync-gauges:
+    name: Sync gauges
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        id: setup-node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.11.1
+          cache: npm
+
+      - name: Install Dependencies
+        id: yarn-ci
+        run: yarn install
+
+      - name: Sync gauges
+        id: sync-gauges
+        env:
+          RPC_URL: ${{ secrets.RPC_URL }}
+          BOT_PK: ${{ secrets.BOT_PK }}
+        run: yarn start-sync

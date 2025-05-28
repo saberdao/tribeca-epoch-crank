@@ -11,8 +11,10 @@
     "typescript": "^5.5.4"
   },
   "scripts": {
-    "local": "node -r ts-node/register --env-file=.env bot.ts",
-    "start": "ts-node bot.ts",
+    "local-trigger": "node -r ts-node/register --env-file=.env triggerEpoch.ts",
+    "start-trigger": "ts-node triggerEpoch.ts",
+    "local-sync": "node -r ts-node/register --env-file=.env sync.ts",
+    "start-sync": "ts-node sync.ts",
     "postinstall": "node postinstall.js"
   },
   "dependencies": {

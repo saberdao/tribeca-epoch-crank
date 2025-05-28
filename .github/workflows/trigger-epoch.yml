@@ -1,15 +1,13 @@
-name: Run crank
+name: Trigger epoch
 
 on:
   schedule:
     - cron: "0 * * * *"
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
-  run-crank:
-    name: Run crank
+  trigger-epoch:
+    name: Trigger epoch
     runs-on: ubuntu-latest
 
     steps:
@@ -28,9 +26,9 @@ jobs:
         id: yarn-ci
         run: yarn install
 
-      - name: Run bot
-        id: run-bot
+      - name: Trigger epoch
+        id: trigger-epoch
         env:
           RPC_URL: ${{ secrets.RPC_URL }}
           BOT_PK: ${{ secrets.BOT_PK }}
-        run: yarn start
+        run: yarn start-trigger
