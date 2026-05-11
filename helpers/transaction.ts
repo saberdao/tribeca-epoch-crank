@@ -13,18 +13,28 @@ const getCUsForTx = async (
         instructions: txs,
     }).compileToV0Message();
     const transaction = new VersionedTransaction(messageV0);
-    const simulation = await connection.simulateTransaction(transaction);
-    if (simulation.value.unitsConsumed === 0) {
-        if (retryNum >= 900) {
+    // replaceRecentBlockhash lets the RPC use its own current blockhash for sim,
+    // so simulation never fails with BlockhashNotFound regardless of how stale
+    // our blockhash is. sigVerify must be false to allow the unsigned tx.
+    const simulation = await connection.simulateTransaction(transaction, {
+        replaceRecentBlockhash: true,
+        sigVerify: false,
+    });
+    if (simulation.value.err) {
+        console.log('Simulation error:', simulation.value.err);
+        console.log('Simulation logs:', simulation.value.logs);
+        throw new Error(`Simulation failed: ${JSON.stringify(simulation.value.err)}`);
+    }
+    if (simulation.value.unitsConsumed === 0 || simulation.value.unitsConsumed == null) {
+        if (retryNum >= 10) {
+            console.log('Sim returned 0 CUs after retries, falling back to 1.4M');
             return 1.4e6;
         }
-        console.log('CU zero, retrying...', retryNum)
-        console.log('Full simulation response:', simulation)
-        await new Promise((resolve) => setTimeout(resolve, 5000));
+        console.log('CU zero, retrying...', retryNum);
+        await new Promise((resolve) => setTimeout(resolve, 2000));
         return getCUsForTx(connection, latestBlockhash, txs, payerKey, retryNum + 1);
     }
-    const CUs = simulation.value.unitsConsumed ?? 1.4e6;
-    return CUs;
+    return simulation.value.unitsConsumed;
 };
 
 export const createVersionedTransaction = async (
